@@ -46,7 +46,7 @@ public class C02_JavaFaker {
         //Email yazdırın:
         System.out.println(faker.internet().emailAddress());
 
-        //Posta kodu yazdırın:
+        //Posta kodu yazdırın: a
         System.out.println(faker.address().zipCode());
 
         //Rastgele 15 haneli numara yazdırın:

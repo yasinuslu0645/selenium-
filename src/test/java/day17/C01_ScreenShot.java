@@ -6,6 +6,9 @@ import org.openqa.selenium.TakesScreenshot;
 import utilities.TestBase;
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class C01_ScreenShot extends TestBase {
     @Test
     public void screenShotTest() throws IOException {
@@ -31,5 +34,13 @@ public class C01_ScreenShot extends TestBase {
 
 
         //Ekran resmini projemize kaydedelim
+    }
+    @Test
+    public void test2() throws IOException {
+        driver.get("https://amazon.com");
+        String tarih = new SimpleDateFormat(".hhmmss").format(new Date());
+        String dosyaYolu = "target/ss/screenShot"+tarih+".png";
+        TakesScreenshot ts = (TakesScreenshot) driver;
+        FileUtils.copyFile(ts.getScreenshotAs(OutputType.FILE),new File(dosyaYolu));
     }
 }

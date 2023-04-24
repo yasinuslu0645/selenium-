@@ -1,4 +1,8 @@
 package utilities;
+
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.apache.commons.io.FileUtils;
 import org.junit.After;
@@ -9,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -16,20 +21,39 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 public abstract class TestBase {
     //TestBase class'ından Obje oluşturmanın önüne geçilmesi için abstract yapılabilir
     //Orn: TestBase base = new TestBase()
     //Bu class'a extends ettiğimiz test classlarından ulaşabiliriz
     protected static WebDriver driver;
+    protected static ExtentReports extentReports; //Raporlamayı başlatır
+    protected static ExtentHtmlReporter extentHtmlReporter;//Raporu HTML formatında düzenler
+    protected static ExtentTest extentTest;//Tüm test aşamalarında extentTest objesi ile bilgi ekleriz
     @Before
     public void setUp() throws Exception {
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver(new ChromeOptions().addArguments("--remote-allow-origins=*"));
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(15));
+        //----------------------------------------------------------------------------------------
+        extentReports = new ExtentReports();
+        String tarih = new SimpleDateFormat("_hh_mm_ss_ddMMyyyy").format(new Date());
+        String dosyaYolu = "TestOutput/reports/extentReport_"+tarih+".html";
+        extentHtmlReporter = new ExtentHtmlReporter(dosyaYolu);
+        extentReports.attachReporter(extentHtmlReporter);
+
+        //Raporda gözükmesini istediğimiz bilgiler için
+        extentReports.setSystemInfo("Browser","Chrome");
+        extentReports.setSystemInfo("Tester","Yasin");
+        extentHtmlReporter.config().setDocumentTitle("Extent Report");
+        extentHtmlReporter.config().setReportName("Smoke Test Raporu");
+        extentTest=extentReports.createTest("ExtentTest","Test Raporu");
     }
+
     @After
     public void tearDown() throws Exception {
+        extentReports.flush();
         bekle(3);
         //driver.quit();
     }
@@ -61,6 +85,7 @@ public abstract class TestBase {
     /*
         Select select2 = new Select(gun);
         select2.selectByVisibleText("7");
+
         //ddmVisibleText(gun,"7"); --> Yukarıdaki kullanım yerine sadece method ile handle edebilirim
      */
     public static void ddmVisibleText(WebElement ddm,String secenek){
@@ -87,20 +112,24 @@ public abstract class TestBase {
         driver.switchTo().window(driver.getWindowHandles().toArray()[sayi].toString());
     }
     //EXPLICIT WAIT METHODS
+
     //Visible Wait
     public static void visibleWait(WebElement element,int sayi){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sayi));
         wait.until(ExpectedConditions.visibilityOf(element));
+
     }
     //VisibleElementLocator Wait
     public static WebElement visibleWait(By locator, int sayi){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sayi));
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+
     }
     //Alert Wait
     public static void alertWait(int sayi){
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sayi));
         wait.until(ExpectedConditions.alertIsPresent());
+
     }
     //Tüm Sayfa ScreenShot
     public static void tumSayfaResmi(){
@@ -113,6 +142,7 @@ public abstract class TestBase {
             throw new RuntimeException(e);
         }
     }
+
     //WebElement ScreenShot
     public static void webElementResmi(WebElement element){
         String tarih = new SimpleDateFormat("_hh_mm_ss_ddMMyyyy").format(new Date());
@@ -123,4 +153,14 @@ public abstract class TestBase {
             throw new RuntimeException(e);
         }
     }
+
+
+
+
+
+
+
+
+
+
 }

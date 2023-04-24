@@ -11,12 +11,12 @@ public class C01_ScreenShot extends TestBase {
 
 
         //Sayfanın resmini alalım
-        tamSayfaScreenShot();
+        tumSayfaResmi();
 
         //Sonra amazon sayfasına gidelim
         driver.get("https://amazon.com");
 
         //Amazon sayfasının ekran görüntüsünü alalım
-        tamSayfaScreenShot();
+        tumSayfaResmi();
     }
 }

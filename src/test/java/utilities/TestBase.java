@@ -167,12 +167,14 @@ public abstract class TestBase {
         js.executeScript("arguments[0].scrollIntoView(true);",element);
     }
 
-
-
-
-
-
-
+    public void scrollEndJS(){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0,document.body.scrollHeight)");
+    }
+    public void scrollTopJS(){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollTo(0,-document.body.scrollHeight)");
+    }
 
 
 }

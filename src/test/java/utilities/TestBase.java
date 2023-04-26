@@ -154,6 +154,18 @@ public abstract class TestBase {
         }
     }
 
+    //Bu method ile herhangi bir elemente JS Executer kullanarak tıklayabilirim:
+    public void clickByJS(WebElement element){
+
+        JavascriptExecutor jsExecuter = (JavascriptExecutor) driver;
+        jsExecuter.executeScript("arguments[0].click();",element);
+    }
+
+    //By method ile herhangi bir elemente JS Executer kullanarak ekranı kaydırma yapabilirim.
+    public void scrollIntoView(WebElement element){
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);",element);
+    }
 
 
 
